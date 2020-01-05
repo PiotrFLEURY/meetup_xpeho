@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meetup_xpeho/image_provider.dart';
 import 'package:provider/provider.dart';
 
 class TeamMember {
@@ -25,12 +26,12 @@ class TeamProvider with ChangeNotifier {
       _team.add(TeamMember(
         name: "FLEURY",
         firstName: "Piotr",
-        mission: "Teach lead Colibri",
+        mission: "Tech lead",
       ));
       _team.add(TeamMember(
         name: "MAKUSA",
         firstName: "Nayden",
-        mission: "Dev Colibri",
+        mission: "Dev",
       ));
     }
     notifyListeners();
@@ -65,85 +66,85 @@ class _TeamPageState extends State<TeamPage> {
       create: (_) => TeamProvider(),
       child: Consumer<TeamProvider>(
         builder: (context, teamProvider, _) {
-          return Scaffold(
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () => _addPressed(teamProvider),
-            ),
-            body: CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  elevation: 8.0,
-                  floating: true,
-                  pinned: true,
-                  snap: true,
-                  flexibleSpace: Stack(children: <Widget>[
-                    Positioned.fill(
-                      child: Image.network(
-                        "https://xpeho.fr/wp-content/uploads/2016/03/xpehobkg.png",
-                        fit: BoxFit.cover,
+          return SafeArea(
+            child: Scaffold(
+              floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () => _addPressed(teamProvider),
+              ),
+              body: CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    elevation: 8.0,
+                    floating: true,
+                    pinned: true,
+                    snap: true,
+                    flexibleSpace: Stack(children: <Widget>[
+                      Positioned.fill(
+                        child: banner(),
                       ),
-                    ),
-                  ]),
-                  // Make the initial height of the SliverAppBar larger than normal.
-                  expandedHeight: 160,
-                  actions: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.refresh),
-                      onPressed: () => teamProvider.fetchTeamMembers(),
-                    ),
-                  ],
-                ),
-                SliverList(
-                  // Use a delegate to build items as they're scrolled on screen.
-                  delegate: SliverChildBuilderDelegate(
-                    // The builder function returns a ListTile with a title that
-                    // displays the index of the current item.
-                    (context, index) {
-                      TeamMember member = teamProvider.member(index);
-                      return Dismissible(
-                        key: GlobalKey(),
-                        onDismissed: (direction) {
-                          if (direction == DismissDirection.startToEnd) {
-                            _editMember(teamProvider, member);
-                          } else if (direction == DismissDirection.endToStart) {
-                            _deleteMember(teamProvider, member);
-                          }
-                        },
-                        background: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                child: Icon(Icons.edit),
-                                color: Colors.green,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                child: Icon(Icons.delete),
-                                color: Colors.red,
-                              ),
-                            )
-                          ],
-                        ),
-                        child: ListTile(
-                          title: Text("${member.name} ${member.firstName}"),
-                          subtitle: Text(member.mission),
-                        ),
-                      );
-                    },
-                    // Builds 1000 ListTiles
-                    childCount: teamProvider.team.length,
+                    ]),
+                    // Make the initial height of the SliverAppBar larger than normal.
+                    expandedHeight: 160,
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: () => teamProvider.fetchTeamMembers(),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  buildMemberList(teamProvider),
+                ],
+              ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget buildMemberList(TeamProvider teamProvider) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          TeamMember member = teamProvider.member(index);
+          return Dismissible(
+            key: GlobalKey(),
+            onDismissed: (direction) {
+              if (direction == DismissDirection.endToStart) {
+                _deleteMember(teamProvider, member);
+              }
+            },
+            background: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Icon(Icons.edit),
+                    color: Colors.green,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Icon(Icons.delete),
+                    color: Colors.red,
+                  ),
+                )
+              ],
+            ),
+            child: ListTile(
+              title: Text("${member.name} ${member.firstName}"),
+              subtitle: Text(member.mission),
+              trailing: Icon(Icons.arrow_forward_ios),
+              onTap: () => _editMember(teamProvider, member),
+            ),
+          );
+        },
+        // Builds 1000 ListTiles
+        childCount: teamProvider.team.length,
       ),
     );
   }

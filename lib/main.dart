@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meetup_xpeho/edit_member.dart';
+import 'package:meetup_xpeho/image_provider.dart';
 import 'package:meetup_xpeho/team.dart';
 
 void main() => runApp(MyApp());
@@ -10,8 +11,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Colors.green,
+          appBarTheme: AppBarTheme(color: Colors.teal)),
       initialRoute: '/',
       routes: {
         "/": (context) => MyHomePage(title: 'Meetup XPEHO Demo Home Page'),
@@ -45,13 +46,17 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       drawer: Drawer(
         child: SafeArea(
-          child: Column(
+          child: ListView(
+            padding: EdgeInsets.zero,
             children: <Widget>[
-              Image.network(
-                  "https://xpeho.fr/wp-content/uploads/2016/03/XPEHO_logo.png"),
-              FlatButton(
-                child: Text("Team members"),
-                onPressed: () {
+              DrawerHeader(
+                child: Container(),
+                decoration:
+                    BoxDecoration(image: DecorationImage(image: logo().image)),
+              ),
+              ListTile(
+                title: Text("Team members"),
+                onTap: () {
                   Navigator.of(context).pop();
                   return Navigator.of(context).pushNamed('/team');
                 },

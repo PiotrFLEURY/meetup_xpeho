@@ -12,9 +12,31 @@ class _EditMemberPageState extends State<EditMemberPage> {
     TeamMember _member = ModalRoute.of(context).settings.arguments;
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.check),
+          onPressed: () => Navigator.of(context).pop(_member),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomAppBar(
+          color: Theme.of(context).appBarTheme.color,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          ),
+          notchMargin: 4.0,
+          shape: CircularNotchedRectangle(),
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
               width: MediaQuery.of(context).size.width,
@@ -27,9 +49,25 @@ class _EditMemberPageState extends State<EditMemberPage> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Material(
+                color: Colors.teal,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    8.0,
+                  ),
+                ),
+                elevation: 4.0,
+                child: Icon(
+                  Icons.person_pin,
+                  color: Colors.white,
+                  size: 96.0,
+                ),
+              ),
+            ),
             TextField(
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
                 hintText: "Name",
                 contentPadding: const EdgeInsets.all(8.0),
               ),
@@ -42,7 +80,6 @@ class _EditMemberPageState extends State<EditMemberPage> {
             ),
             TextField(
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
                 hintText: "First name",
                 contentPadding: const EdgeInsets.all(8.0),
               ),
@@ -53,25 +90,23 @@ class _EditMemberPageState extends State<EditMemberPage> {
                 _member.firstName = value;
               },
             ),
-            TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Mission",
-                contentPadding: const EdgeInsets.all(8.0),
-              ),
-              controller: TextEditingController(
-                text: _member.mission,
-              ),
+            DropdownButton(
+              value: _member.mission,
+              items: List.generate(TeamProvider().missions.length, (index) {
+                return DropdownMenuItem(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(TeamProvider().missions[index]),
+                  ),
+                  value: TeamProvider().missions[index],
+                );
+              }),
               onChanged: (value) {
-                _member.mission = value;
+                setState(() {
+                  _member.mission = value;
+                });
               },
             ),
-            RaisedButton(
-              child: Text("Valider"),
-              onPressed: () {
-                Navigator.of(context).pop(_member);
-              },
-            )
           ],
         ),
       ),
