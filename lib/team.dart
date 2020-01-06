@@ -23,11 +23,8 @@ class TeamProvider with ChangeNotifier {
 
   void fetchTeamMembers() async {
     if (_team.isEmpty) {
-      _team.add(TeamMember(
-        name: "FLEURY",
-        firstName: "Piotr",
-        mission: "Tech lead"
-      ));
+      _team.add(
+          TeamMember(name: "FLEURY", firstName: "Piotr", mission: "Tech lead"));
       _team.add(TeamMember(
         name: "MAKUSA",
         firstName: "Nayden",
@@ -147,6 +144,7 @@ class _TeamPageState extends State<TeamPage> {
         (context, index) {
           TeamMember member = teamProvider.member(index);
           return Dismissible(
+            confirmDismiss: (direction) => _confirmDismiss(context),
             key: GlobalKey(),
             onDismissed: (direction) {
               if (direction == DismissDirection.endToStart) {
@@ -155,19 +153,18 @@ class _TeamPageState extends State<TeamPage> {
             },
             background: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Expanded(
                   flex: 1,
                   child: Container(
-                    child: Icon(Icons.edit),
-                    color: Colors.green,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: Icon(Icons.delete),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(8),
+                      trailing: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                    ),
                     color: Colors.red,
                   ),
                 )
@@ -185,6 +182,25 @@ class _TeamPageState extends State<TeamPage> {
         childCount: teamProvider.team.length,
       ),
     );
+  }
+
+  Future<bool> _confirmDismiss(BuildContext context) {
+    return showDialog<bool>(
+                context: context,
+                builder: (_) => AlertDialog(
+                      title: Text("Confirm"),
+                      content: Text("Supprimer le membre de l'équipe ?"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("Oui"),
+                          onPressed: () => Navigator.of(context).pop(true),
+                        ),
+                        FlatButton(
+                          child: Text("Non"),
+                          onPressed: () => Navigator.of(context).pop(false),
+                        )
+                      ],
+                    ));
   }
 
   void _addPressed(TeamProvider teamProvider) {
