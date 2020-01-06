@@ -12,6 +12,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
     TeamMember _member = ModalRoute.of(context).settings.arguments;
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomPadding: false,
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.check),
           onPressed: () => Navigator.of(context).pop(_member),
@@ -34,80 +35,82 @@ class _EditMemberPageState extends State<EditMemberPage> {
           notchMargin: 4.0,
           shape: CircularNotchedRectangle(),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                      "https://xpeho.fr/wp-content/uploads/2016/03/banner_nous-2.png"),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Material(
-                color: Colors.teal,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    8.0,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 200,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                        "https://xpeho.fr/wp-content/uploads/2016/03/banner_nous-2.png"),
                   ),
                 ),
-                elevation: 4.0,
-                child: Icon(
-                  Icons.person_pin,
-                  color: Colors.white,
-                  size: 96.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Material(
+                  color: Colors.teal,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      8.0,
+                    ),
+                  ),
+                  elevation: 4.0,
+                  child: Icon(
+                    Icons.person_pin,
+                    color: Colors.white,
+                    size: 56.0,
+                  ),
                 ),
               ),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Name",
-                contentPadding: const EdgeInsets.all(8.0),
+              TextField(
+                decoration: InputDecoration(
+                  hintText: "Name",
+                  contentPadding: const EdgeInsets.all(8.0),
+                ),
+                controller: TextEditingController(
+                  text: _member.name,
+                ),
+                onChanged: (value) {
+                  _member.name = value;
+                },
               ),
-              controller: TextEditingController(
-                text: _member.name,
+              TextField(
+                decoration: InputDecoration(
+                  hintText: "First name",
+                  contentPadding: const EdgeInsets.all(8.0),
+                ),
+                controller: TextEditingController(
+                  text: _member.firstName,
+                ),
+                onChanged: (value) {
+                  _member.firstName = value;
+                },
               ),
-              onChanged: (value) {
-                _member.name = value;
-              },
-            ),
-            TextField(
-              decoration: InputDecoration(
-                hintText: "First name",
-                contentPadding: const EdgeInsets.all(8.0),
+              DropdownButton(
+                value: _member.mission,
+                items: List.generate(TeamProvider().missions.length, (index) {
+                  return DropdownMenuItem(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(TeamProvider().missions[index]),
+                    ),
+                    value: TeamProvider().missions[index],
+                  );
+                }),
+                onChanged: (value) {
+                  setState(() {
+                    _member.mission = value;
+                  });
+                },
               ),
-              controller: TextEditingController(
-                text: _member.firstName,
-              ),
-              onChanged: (value) {
-                _member.firstName = value;
-              },
-            ),
-            DropdownButton(
-              value: _member.mission,
-              items: List.generate(TeamProvider().missions.length, (index) {
-                return DropdownMenuItem(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(TeamProvider().missions[index]),
-                  ),
-                  value: TeamProvider().missions[index],
-                );
-              }),
-              onChanged: (value) {
-                setState(() {
-                  _member.mission = value;
-                });
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

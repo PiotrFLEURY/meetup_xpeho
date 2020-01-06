@@ -26,7 +26,7 @@ class TeamProvider with ChangeNotifier {
       _team.add(TeamMember(
         name: "FLEURY",
         firstName: "Piotr",
-        mission: "Tech lead",
+        mission: "Tech lead"
       ));
       _team.add(TeamMember(
         name: "MAKUSA",
@@ -68,6 +68,42 @@ class _TeamPageState extends State<TeamPage> {
         builder: (context, teamProvider, _) {
           return SafeArea(
             child: Scaffold(
+              drawer: Drawer(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    DrawerHeader(
+                      child: Container(),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(image: logo().image)),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.refresh),
+                      title: Text("Refresh"),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        _refresh(teamProvider);
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.person_add),
+                      title: Text("Add member"),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        _addPressed(teamProvider);
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.info),
+                      title: Text("About"),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        showAboutDialog(context: context);
+                      },
+                    ),
+                  ],
+                ),
+              ),
               floatingActionButton: FloatingActionButton(
                 child: Icon(Icons.add),
                 onPressed: () => _addPressed(teamProvider),
@@ -89,7 +125,7 @@ class _TeamPageState extends State<TeamPage> {
                     actions: <Widget>[
                       IconButton(
                         icon: Icon(Icons.refresh),
-                        onPressed: () => teamProvider.fetchTeamMembers(),
+                        onPressed: () => _refresh(teamProvider),
                       ),
                     ],
                   ),
@@ -102,6 +138,8 @@ class _TeamPageState extends State<TeamPage> {
       ),
     );
   }
+
+  void _refresh(TeamProvider teamProvider) => teamProvider.fetchTeamMembers();
 
   Widget buildMemberList(TeamProvider teamProvider) {
     return SliverList(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meetup_xpeho/edit_member.dart';
 import 'package:meetup_xpeho/image_provider.dart';
+import 'package:meetup_xpeho/splash.dart';
 import 'package:meetup_xpeho/team.dart';
 
 void main() => runApp(MyApp());
@@ -9,13 +10,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'XPEHO Meetup',
       theme: ThemeData(
           primarySwatch: Colors.green,
           appBarTheme: AppBarTheme(color: Colors.teal)),
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: {
-        "/": (context) => MyHomePage(title: 'Meetup XPEHO Demo Home Page'),
+        //"/": (context) => MyHomePage(title: 'Meetup XPEHO Demo Home Page'),
+        "/splash": (context) => SplashPage(),
         "/team": (context) => TeamPage(),
         "/editMember": (context) => EditMemberPage(),
       },
@@ -44,27 +46,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: SafeArea(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                child: Container(),
-                decoration:
-                    BoxDecoration(image: DecorationImage(image: logo().image)),
-              ),
-              ListTile(
-                title: Text("Team members"),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  return Navigator.of(context).pushNamed('/team');
-                },
-              )
-            ],
-          ),
-        ),
-      ),
       appBar: AppBar(
         title: Text(widget.title),
       ),
