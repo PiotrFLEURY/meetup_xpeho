@@ -42,10 +42,10 @@ class _EditMemberPageState extends State<EditMemberPage> {
             children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 200,
+                height: 100,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                     image: NetworkImage(
                         "https://xpeho.fr/wp-content/uploads/2016/03/banner_nous-2.png"),
                   ),
@@ -54,17 +54,20 @@ class _EditMemberPageState extends State<EditMemberPage> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Material(
-                  color: Colors.teal,
+                  color: Colors.white,
                   borderRadius: BorderRadius.all(
                     Radius.circular(
                       8.0,
                     ),
                   ),
                   elevation: 4.0,
-                  child: Icon(
-                    Icons.person_pin,
-                    color: Colors.white,
-                    size: 56.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.add_a_photo,
+                      color: Colors.grey,
+                      size: 56.0,
+                    ),
                   ),
                 ),
               ),

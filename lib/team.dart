@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:meetup_xpeho/image_provider.dart';
 import 'package:provider/provider.dart';
@@ -19,18 +21,18 @@ class TeamProvider with ChangeNotifier {
     _missions.add('Dev');
     _missions.add('PO');
     _missions.add('Scrum master');
+    fetchTeamMembers();
   }
 
   void fetchTeamMembers() async {
-    if (_team.isEmpty) {
-      _team.add(
-          TeamMember(name: "FLEURY", firstName: "Piotr", mission: "Tech lead"));
-      _team.add(TeamMember(
-        name: "MAKUSA",
-        firstName: "Nayden",
-        mission: "Dev",
-      ));
-    }
+    _team.clear();
+    _team.add(
+        TeamMember(name: "FLEURY", firstName: "Piotr", mission: "Tech lead"));
+    _team.add(TeamMember(
+      name: "MAKUSA",
+      firstName: "Nayden",
+      mission: "Dev",
+    ));
     notifyListeners();
   }
 
@@ -186,21 +188,21 @@ class _TeamPageState extends State<TeamPage> {
 
   Future<bool> _confirmDismiss(BuildContext context) {
     return showDialog<bool>(
-                context: context,
-                builder: (_) => AlertDialog(
-                      title: Text("Confirm"),
-                      content: Text("Supprimer le membre de l'équipe ?"),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text("Oui"),
-                          onPressed: () => Navigator.of(context).pop(true),
-                        ),
-                        FlatButton(
-                          child: Text("Non"),
-                          onPressed: () => Navigator.of(context).pop(false),
-                        )
-                      ],
-                    ));
+        context: context,
+        builder: (_) => AlertDialog(
+              title: Text("Confirm"),
+              content: Text("Supprimer le membre de l'équipe ?"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Oui"),
+                  onPressed: () => Navigator.of(context).pop(true),
+                ),
+                FlatButton(
+                  child: Text("Non"),
+                  onPressed: () => Navigator.of(context).pop(false),
+                )
+              ],
+            ));
   }
 
   void _addPressed(TeamProvider teamProvider) {

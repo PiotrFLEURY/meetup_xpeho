@@ -7,3 +7,6 @@ Image banner() => Image.network(
       "https://xpeho.fr/wp-content/uploads/2016/03/xpehobkg.png",
       fit: BoxFit.cover,
     );
+
+Image aboutHeader() => Image.network(
+    "https://xpeho.fr/wp-content/uploads/2016/03/banner-valeurs.jpg");
